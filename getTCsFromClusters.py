@@ -11,7 +11,7 @@ def main():
     ttree = tfile.Get("hgcalTriggerNtuplizer/HGCalTriggerNtuple")
 
     out = open("tcinfo.csv", "w")
-    out.write("event,clusterid,tcenergy,tclayer,tcx,tcy,tcabsz,tcabseta,tcphi\n")
+    out.write("event, clusterid, tcenergy, tclayer, tcx, tcy, tcabsz, tcabseta, tcphi\n")
     for i,event in enumerate(ttree):
 
         print ("Event number ", i , "\n\n")

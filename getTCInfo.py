@@ -22,9 +22,12 @@ def main():
     makeplots = False
     maketxt = True
 
+    if maketxt:
+        out = open("info.csv", "w")
+
     
     for i,event in enumerate(ttree):
-        print ("event number ", i, " positive end-cap")
+        out.write("event number " + str(i) + " positive end-cap\n")
         if ( i == nevents ):
             break
         h1p = ROOT.TH2D("tc_positive"+str(i),"TCs Event" + str(i) + " +z", 50, 1.0, 3.5, 50, -math.pi, math.pi)
@@ -33,8 +36,8 @@ def main():
         h2n = ROOT.TH2D("gen_negative"+str(i),"Gen Particles Event" + str(i) + " +z", 50, 1.0, 3.5, 50, -math.pi, math.pi)
 
         #TCs
-        print ("trigger cells eta,phi,energy_t")
-        for eta,phi,energy,pt in zip(event.tc_eta, event.tc_phi, event.tc_energy, event.tc_pt):
+        out.write("trigger cells r/z, phi, energy_t, layer\n")
+        for eta,phi,energy,pt,x,y,z,layer in zip(event.tc_eta, event.tc_phi, event.tc_energy, event.tc_pt, event.tc_x, event.tc_y, event.tc_z, event.tc_layer):
             if ( eta<0 ):
                 continue
             if energyweighted:
@@ -43,9 +46,11 @@ def main():
                 h1p.Fill(abs(eta),phi)
 
             if maketxt:
-                print (str(eta) + "," + str(phi) + "," + str(pt))
+                r = math.sqrt(x*x + y*y)
+                roverz = abs(r/z)
+                out.write(str(roverz) + ", " + str(phi) + ", " + str(pt) + "\n")
         #Gen
-        print ("stable gen particles eta,phi,energy_t,pdgid")
+        out.write("stable gen particles eta, phi, energy_t, pdgid\n")
         for pdgid,eta,phi,energy,status in zip(event.gen_pdgid, event.gen_eta, event.gen_phi, event.gen_energy, event.gen_status):
 
             if ( status != 1 ):
@@ -59,13 +64,13 @@ def main():
             et = energy/math.cosh(eta)
 
             if maketxt:
-                print (str(eta) + "," + str(phi) + "," + str(et) + "," + str(pdgid))
+                out.write (str(eta) + ", " + str(phi) + ", " + str(et) + ", " + str(pdgid) + "\n")
 
-        print ("event number ", i, " negative end-cap")
+        out.write ("event number " + str(i) +  " negative end-cap\n")
 
         #TCs
-        print ("trigger cells eta,phi,energy_t")
-        for eta,phi,energy,pt in zip(event.tc_eta, event.tc_phi, event.tc_energy, event.tc_pt):
+        out.write ("trigger cells r/z, phi, energy_t, layer\n")
+        for eta,phi,energy,pt,x,y,z,layer in zip(event.tc_eta, event.tc_phi, event.tc_energy, event.tc_pt, event.tc_x, event.tc_y, event.tc_z, event.tc_layer):
             if ( eta>=0 ):
                 continue
             if energyweighted:
@@ -74,10 +79,12 @@ def main():
                 h1n.Fill(abs(eta),phi)
 
             if maketxt:
-                print (str(abs(eta)) + "," + str(phi) + "," + str(pt))
+                r = math.sqrt(x*x + y*y)
+                roverz = abs(r/z)
+                out.write(str(roverz) + ", " + str(phi) + ", " + str(pt) + + ", " + str(layer) + "\n")
 
         #Gen
-        print ("stable gen particles eta,phi,energy_t,pdgid")
+        out.write ("stable gen particles eta, phi, energy_t, pdgid\n")
         for pdgid,eta,phi,energy,status in zip(event.gen_pdgid, event.gen_eta, event.gen_phi, event.gen_energy, event.gen_status):
 
             if ( status != 1 ):
@@ -91,7 +98,7 @@ def main():
             et = energy/math.cosh(eta)
 
             if maketxt:                
-                print (str(eta) + "," + str(phi) + "," + str(et) + "," + str(pdgid))
+                out.write (str(eta) + ", " + str(phi) + ", " + str(et) + ", " + str(pdgid) + "\n")
 
         if makeplots:
             plot(h1p,h1p.GetName())
