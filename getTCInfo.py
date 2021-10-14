@@ -48,7 +48,8 @@ def main():
             if maketxt:
                 r = math.sqrt(x*x + y*y)
                 roverz = abs(r/z)
-                out.write(str(roverz) + ", " + str(phi) + ", " + str(pt) + "\n")
+                out.write(str(roverz) + ", " + str(phi) + ", " + str(pt) + ", " + str(layer) + "\n")
+
         #Gen
         out.write("stable gen particles eta, phi, energy_t, pdgid\n")
         for pdgid,eta,phi,energy,status in zip(event.gen_pdgid, event.gen_eta, event.gen_phi, event.gen_energy, event.gen_status):
@@ -64,7 +65,7 @@ def main():
             et = energy/math.cosh(eta)
 
             if maketxt:
-                out.write (str(eta) + ", " + str(phi) + ", " + str(et) + ", " + str(pdgid) + "\n")
+                out.write (str(abs(eta)) + ", " + str(phi) + ", " + str(et) + ", " + str(pdgid) + "\n")
 
         out.write ("event number " + str(i) +  " negative end-cap\n")
 
@@ -81,7 +82,7 @@ def main():
             if maketxt:
                 r = math.sqrt(x*x + y*y)
                 roverz = abs(r/z)
-                out.write(str(roverz) + ", " + str(phi) + ", " + str(pt) + + ", " + str(layer) + "\n")
+                out.write(str(roverz) + ", " + str(phi) + ", " + str(pt) + ", " + str(layer) + "\n")
 
         #Gen
         out.write ("stable gen particles eta, phi, energy_t, pdgid\n")
@@ -98,7 +99,7 @@ def main():
             et = energy/math.cosh(eta)
 
             if maketxt:                
-                out.write (str(eta) + ", " + str(phi) + ", " + str(et) + ", " + str(pdgid) + "\n")
+                out.write (str(abs(eta)) + ", " + str(phi) + ", " + str(et) + ", " + str(pdgid) + "\n")
 
         if makeplots:
             plot(h1p,h1p.GetName())
